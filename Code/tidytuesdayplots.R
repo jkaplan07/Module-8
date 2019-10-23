@@ -23,25 +23,34 @@ summary(student_ratio)
 #plot 1: line graph of world primary education teacher-student ratio
 student_ratio %>%
   filter(country == "World") %>%
+  mutate(indicator = fct_relevel
+         (indicator, c("Pre-Primary Education", "Primary Education", "Lower Secondary Education", "Secondary Education", "Upper Secondary Education"))) %>%
   ggplot (aes(x = year, y = student_ratio, color = indicator)) +
   geom_line() +
   geom_point() +
-  theme_classic() + 
+  theme_classic() +
+  #theme(panel.background = element_rect(fill = "grey100")) +
+  scale_color_brewer(type="seq", palette = "Reds", "Education Type") +
   labs (
     x = "Year", 
     y = "Student: Teacher Ratio", 
-    title = "Global Education Student: Teacher Ratio by Education Type"
-  ) +
-  theme(plot.title=element_text(hjust = 0.5)) +
-  scale_color_manual(name = "Education Type", values=c("goldenrod", "blueviolet", "firebrick1", "darkturquoise", "forestgreen"))
+    title = "Global Education Student: Teacher Ratio by Education Type") +
+  theme(plot.title=element_text(hjust = 0.5)) 
 
 #plot 2
 student_ratio %>%
   filter(country_code == "USA") %>%
   filter(year == 2015) %>%
+  mutate(indicator = fct_relevel
+         (indicator, c("Pre-Primary Education", "Primary Education", "Lower Secondary Education", "Secondary Education", "Upper Secondary Education"))) %>%
   select(indicator, student_ratio) %>%
   ggplot(aes(x = indicator, y = student_ratio)) + 
-  geom_col(col = "grey9", fill="grey9") +
+  geom_col(col = "grey88", fill="grey88") +
+  scale_y_continuous(name = "Student: Teacher Ratio",
+                     breaks = seq(0,15,1), 
+                     labels = waiver(),
+                     limits = c(0, 15)
+                     ) +
   theme_classic() +
   labs (
     x = "Education Level", 
